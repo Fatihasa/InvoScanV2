@@ -10,6 +10,7 @@ import java.util.Map;
 @Service
 public class LLMService {
 
+
     @Value("${openrouter.api.key}")
     private String apiKey;
 
