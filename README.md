@@ -74,3 +74,21 @@ mvn clean install
 mvn spring-boot:run
 Open your browser:
 Visit http://localhost:8080
+
+## Test Login Credentials
+
+To test the application, you can use the following example login:
+
+- **Email:** admin@invoscan.com  
+- **Password:** admin123
+
+## Test Invoice Documents for uploading files
+
+[B-OVLU1912801 104.xlsx](https://github.com/user-attachments/files/20745999/B-OVLU1912801.104.xlsx)
+
+[A-880-39146446-27.xlsx](https://github.com/user-attachments/files/20746001/A-880-39146446-27.xlsx)
+
+[FFAU2720208-A.xlsx](https://github.com/user-attachments/files/20746002/FFAU2720208-A.xlsx)
+
+
+
