@@ -80,7 +80,7 @@ Visit http://localhost:8080
 To test the application, you can use the following example login:
 
 - **Email:** admin@invoscan.com  
-- **Password:** admin123
+- **Password:** 123456
 
 ## Test Invoice Documents for uploading files
 
