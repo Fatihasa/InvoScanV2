@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>InvoAI Chat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .site-header {
+            background: linear-gradient(to right, #4fd1c5, #3182ce);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50px;
+            padding: 0.5em 1em;
+            position: relative;
+        }
+
+        .logo-link {
+            display: inline-block;
+        }
+
+        .logo {
+            height: 220px;
+            padding-top: 5px;
+        }
+
+        .invoai-logo-link {
+            position: absolute;
+            right: 20px;
+        }
+
+        .invoai-logo {
+            height: 120px;
+            width: auto;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .chat-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 1em;
+            box-sizing: border-box;
+        }
+
+        .chat-box {
+            flex: 1;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 1em;
+            overflow-y: auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 0.5em;
+        }
+
+        .chat-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+            padding: 0.5em 0;
+        }
+
+        .chat-form textarea {
+            resize: vertical;
+            min-height: 80px;
+            padding: 0.8em;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .chat-form button {
+            align-self: flex-end;
+            padding: 0.8em 1.5em;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            background-color: #3182ce;
+            color: white;
+            cursor: pointer;
+        }
+
+        .chat-form button:hover {
+            background-color: #2563eb;
+        }
+
+        .chat-message {
+            margin-bottom: 1.5em;
+        }
+
+        .chat-message.user {
+            font-weight: bold;
+            color: #2b6cb0;
+        }
+
+        .chat-message.bot {
+            display: flex;
+            align-items: flex-start;
+            background: #eef6fb;
+            border-left: 4px solid #3182ce;
+            border-radius: 6px;
+            padding: 1em;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+        }
+
+        .chat-message.bot img {
+            width: 40px;
+            height: 40px;
+            margin-right: 1em;
+        }
+
+        .chat-message.bot p {
+            margin: 0;
+            line-height: 1.5;
+            white-space: pre-line;
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <a href="/" class="logo-link">
+        <img src="/img/InvoscanLogo.png" alt="Invoscan Logo" class="logo">
+    </a>
+    <a href="/invoai" class="invoai-logo-link">
+        <img src="/img/invoai.png" alt="InvoAI Logo" class="invoai-logo">
+    </a>
+</header>
+
+<div class="chat-wrapper">
+    <div class="chat-box">
+
+        <div class="chat-message bot" th:if="${response}">
+            <img src="/img/invobot.png" alt="Bot Icon">
+            <p th:text="${response}">InvoAI response here</p>
+        </div>
+    </div>
+
+    <form class="chat-form" method="post" th:action="@{/invoai}" th:object="${chatForm}">
+        <textarea name="description" placeholder="Enter product description to get HS code..." required></textarea>
+        <button type="submit">Get HS Code</button>
+    </form>
+</div>
+
+</body>
+</html>

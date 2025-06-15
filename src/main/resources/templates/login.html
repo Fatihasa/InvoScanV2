@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - InvoScan</title>
+    <style>
+        body {
+            background: radial-gradient(circle at 60% 40%, #4fd1c5 0%, #3182ce 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+        .login-container {
+            background: #fff;
+            padding: 2.5em 2.2em 2em 2.2em;
+            border-radius: 22px;
+            box-shadow: 0 6px 36px rgba(0,0,0,0.13);
+            width: 100%;
+            max-width: 370px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 1.7em;
+            position: relative;
+            margin: 0 1em;
+        }
+        .login-logo {
+            width: 210px;
+            height: auto;
+            margin: 0 auto 1.3em auto;
+            display: block;
+            filter: drop-shadow(0 2px 8px rgba(49,130,206,0.10));
+        }
+        h2 {
+            color: #23395d;
+            font-weight: 800;
+            margin-bottom: 1.3em;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25em;
+        }
+        .input-group {
+            padding-right: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8em;
+        }
+        input[type="text"], input[type="password"] {
+            padding: 1em 1.15em;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 13px;
+            font-size: 1.07em;
+            width: 100%;
+            outline: none;
+            transition: border-color 0.19s, box-shadow 0.18s;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f8fafc;
+            box-shadow: 0 2px 8px rgba(49,130,206,0.07);
+        }
+        input[type="text"]:focus, input[type="password"]:focus {
+            border-color: #3182ce;
+            box-shadow: 0 4px 16px rgba(49,130,206,0.13);
+            background: #f4fafd;
+        }
+        .login-btn {
+            padding: 0.95em 0;
+            background: linear-gradient(90deg, #3182ce 70%, #4fd1c5 100%);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.12em;
+            cursor: pointer;
+            transition: background 0.19s, box-shadow 0.22s;
+            margin-top: 0.7em;
+            box-shadow: 0 2px 12px rgba(49,130,206,0.09);
+            letter-spacing: 0.01em;
+        }
+        .login-btn:hover {
+            background: linear-gradient(90deg, #2563eb 80%, #38b2ac 100%);
+            box-shadow: 0 6px 18px rgba(49,130,206,0.19);
+        }
+        .login-error {
+            color: #e53e3e;
+            background: #fff5f5;
+            border-radius: 5px;
+            padding: 0.7em 0.7em;
+            margin-bottom: 0.5em;
+            font-size: 0.98em;
+            font-weight: 500;
+        }
+        @media (max-width: 500px) {
+            .login-container {
+                padding: 1.3em 0.5em 1em 0.5em;
+            }
+            .login-logo {
+                width: 78px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <img src="/img/InvoscanLogo.png" alt="InvoScan Logo" class="login-logo">
+    <h2>Sign in to InvoScan</h2>
+    <form th:action="@{/login}" method="post">
+        <div th:if="${loginError}" class="login-error" th:text="${loginError}">Invalid credentials.</div>
+        <div class="input-group">
+            <input type="text" name="email" placeholder="Email address" required autofocus autocomplete="username">
+            <input type="password" name="password" placeholder="Password" required autocomplete="current-password">
+        </div>
+        <button class="login-btn" type="submit">Login</button>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi Excel Validator - InvoScan</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+    }
+    .site-header {
+      background: linear-gradient(to right, #4fd1c5, #3182ce);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 50px;
+      padding: 0.5em 1em;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+    .logo-link {
+      display: inline-block;
+    }
+    .logo {
+      padding-top: 5px;
+      height: 220px;
+      width: auto;
+    }
+    .invoai-logo-link {
+      position: absolute;
+      right: 20px;
+    }
+    .invoai-logo {
+      height: 120px;
+      width: auto;
+      transition: transform 0.2s ease-in-out;
+    }
+    .invoai-logo:hover {
+      transform: scale(1.1);
+      cursor: pointer;
+    }
+    .container {
+      max-width: 900px;
+      margin: 2em auto;
+      padding: 0 1em;
+    }
+    .card {
+      background: white;
+      padding: 1.5em;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 2em;
+    }
+    .success {
+      color: green;
+    }
+    .fail {
+      color: red;
+    }
+    .file-list-ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .file-list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6em 0.8em;
+      border-bottom: 1px solid #e2e8f0;
+      transition: background 0.2s;
+    }
+    .file-list-item:hover {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+    .file-name a {
+      color: #2b6cb0;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .file-name a:hover {
+      text-decoration: underline;
+    }
+    .delete-button {
+      background-color: #e53e3e;
+      color: white;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.9em;
+    }
+    .delete-button:hover {
+      background-color: #c53030;
+    }
+    button[type="submit"] {
+      background-color: #3182ce;
+      color: white;
+      padding: 0.5em 1.2em;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button[type="submit"]:hover {
+      background-color: #2563eb;
+    }
+    .kg-input {
+      margin-top: 10px;
+    }
+    .kg-input input {
+      padding: 0.4em;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 150px;
+    }
+    .kg-input label {
+      margin-right: 0.5em;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="/clear" class="logo-link" title="Delete all files">
+    <img src="/img/InvoscanLogo.png" alt="Invoscan Logo" class="logo">
+  </a>
+  <a href="/invoai" class="invoai-logo-link" title="Go to InvoAI Page">
+    <img src="/img/invoai.png" alt="InvoAI Logo" class="invoai-logo">
+  </a>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <h2>Upload Excel Files</h2>
+    <form method="post" enctype="multipart/form-data" action="/upload">
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 1.5em;">
+        <div>
+          <label for="files" style="display: block; font-weight: 500; margin-bottom: 4px;">Select Invoice File(s)</label>
+          <input type="file" name="files" id="files" multiple required style="padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+        </div>
+        <div>
+          <label for="kg" style="display: block; font-weight: 500; margin-bottom: 4px;">Gross Weight (kg)</label>
+          <input type="number" name="kg" id="kg" placeholder="Enter gross weight"
+                 style="padding: 8px; border-radius: 5px; border: 1px solid #ccc; width: 160px;">
+        </div>
+        <div style="align-self: flex-end;">
+          <button type="submit" style="margin-bottom: 5px">Upload</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="card file-list">
+    <h3>Uploaded Files:</h3>
+    <ul class="file-list-ul">
+      <li th:each="file : ${filenames}" class="file-list-item">
+        <div class="file-name">
+          <a th:href="@{'/result/' + ${file}}" th:text="${file}">filename.xlsx</a>
+        </div>
+        <form th:action="@{/delete}" method="post">
+          <input type="hidden" name="filename" th:value="${file}" />
+          <button type="submit" class="delete-button">🗑 Delete</button>
+        </form>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card" th:if="${results}">
+    <h3 th:text="'Results for: ' + ${selectedFile}">File Results</h3>
+    <ul>
+      <li th:each="result : ${results}"
+          th:classappend="${result.passed} ? 'success' : 'fail'">
+        <b th:text="${result.name}">Name</b> →
+        <span th:text="${result.message}">Message</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- TOPLU HATA MESAJLARI ALANI (YENİ) -->
+  <div class="card" th:if="${hasAnyFail}">
+    <h3 style="margin-bottom: 0.7em;">All Error Messages</h3>
+    <label for="all-errors" style="font-weight:500;margin-bottom:0.3em;display:block;">Copy all errors below:</label>
+    <textarea id="all-errors" style="width:100%;min-height:210px;padding:0.7em;resize:vertical;border-radius:7px;border:1px solid #bbb;font-family:monospace;font-size:1em;background:#f5f5f5;" readonly
+              th:text="${allErrorsText}"></textarea>
+    <button type="button" onclick="copyAllErrors()" style="margin-top:0.7em;padding:8px 18px;border:none;border-radius:5px;background:#3182ce;color:white;font-weight:600;font-size:1em;cursor:pointer;">
+      Copy to Clipboard
+    </button>
+  </div>
+  <div class="card" th:if="${!hasAnyFail}">
+    <span style="color:green;font-weight:500;">No errors in any file.</span>
+  </div>
+  <!-- TOPLU HATA MESAJLARI ALANI SONU -->
+
+</div>
+
+<script>
+  function copyAllErrors() {
+    var textarea = document.getElementById('all-errors');
+    textarea.select();
+    textarea.setSelectionRange(0, 99999); // For mobile
+    document.execCommand('copy');
+  }
+</script>
+
+</body>
+</html>
